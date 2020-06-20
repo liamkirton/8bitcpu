@@ -24,15 +24,14 @@ constexpr uint32_t PIN_MIN = 9;
 // General Control Pins
 //
 
-constexpr uint32_t PIN_RST = 10;
 constexpr uint32_t PIN_PROGRAM = 12;
 
 //
 // Constants
 //
 
-constexpr uint32_t DELAY_US = 250;
-constexpr uint32_t DELAY_LONG_MS = 50;
+constexpr uint32_t DELAY_US = 50;
+constexpr uint32_t DELAY_LONG_MS = 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,11 +88,7 @@ void write_mem_value(uint8_t value) {
 
 void output_mem(uint16_t address) {
     write_mem_addr(address);
-    delayMicroseconds(DELAY_US);
-
-    digitalWrite(PIN_MOUT, HIGH);
     delay(DELAY_LONG_MS);
-    digitalWrite(PIN_MOUT, LOW);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +96,7 @@ void output_mem(uint16_t address) {
 void write_mem(uint16_t address, uint8_t value) {
     write_mem_addr(address);
     delayMicroseconds(DELAY_US);
+
     write_mem_value(value);
     delayMicroseconds(DELAY_US);
 }
@@ -108,37 +104,17 @@ void write_mem(uint16_t address, uint8_t value) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void disable() {
-    pinMode(PIN_MCLK, INPUT);
     pinMode(PIN_MADDRIN, INPUT);
     pinMode(PIN_MIN, INPUT);
     pinMode(PIN_MOUT, INPUT);
-    pinMode(PIN_RST, INPUT);
-
-    reset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void enable() {
-    pinMode(PIN_MCLK, OUTPUT);
     pinMode(PIN_MADDRIN, OUTPUT);
     pinMode(PIN_MIN, OUTPUT);
     pinMode(PIN_MOUT, OUTPUT);
-    pinMode(PIN_RST, OUTPUT);
-
-    digitalWrite(PIN_RST, LOW);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void reset() {
-    digitalWrite(PIN_RST, HIGH);
-    delay(DELAY_LONG_MS);
-    digitalWrite(PIN_RST, LOW);
-    delay(DELAY_LONG_MS);
-    digitalWrite(PIN_RST, HIGH);
-    delay(DELAY_LONG_MS);
-    digitalWrite(PIN_RST, LOW);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,14 +128,20 @@ void setup() {
     pinMode(PIN_RCLK, OUTPUT);
     pinMode(PIN_OUT, OUTPUT);
 
-    pinMode(PIN_PROGRAM, INPUT_PULLUP);
+    pinMode(PIN_PROGRAM, INPUT);
 
     digitalWrite(PIN_SER, LOW);
     digitalWrite(PIN_SRCLK, LOW);
     digitalWrite(PIN_RCLK, LOW);
     digitalWrite(PIN_OUT, HIGH);
 
-    reset();
+    pinMode(PIN_MCLK, OUTPUT);
+    pinMode(PIN_MADDRIN, INPUT);
+    pinMode(PIN_MIN, INPUT);
+    pinMode(PIN_MOUT, INPUT);
+
+    digitalWrite(PIN_MCLK, LOW);
+
     delay(2500);
 }
 
@@ -167,6 +149,8 @@ void setup() {
 
 void program_rom() {
     enable();
+    write_mem(255, 255);
+
     for (uint16_t i = 0; i < 256; ++i) {
         uint8_t v = 0;
         if (i < sizeof(INIT_PROGRAM)) {
@@ -185,7 +169,7 @@ void program_rom() {
 void loop() {
     static bool have_programmed_rom = false;
 
-    if (!have_programmed_rom && digitalRead(PIN_PROGRAM) == LOW) {
+    if (!have_programmed_rom && digitalRead(PIN_PROGRAM) == HIGH) {
         have_programmed_rom = true;
         program_rom();
     }

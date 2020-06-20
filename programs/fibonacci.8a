@@ -1,0 +1,11 @@
+start:
+    LD 0x01 RA
+    LD 0x01 RB
+loop:
+    OUT
+    MV RA RC
+    ADD
+    MV RC RB
+    JC start
+    OUT
+    JMP loop

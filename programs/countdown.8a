@@ -1,0 +1,9 @@
+start:
+    LD 0xff RA
+    LD 0x01 RB
+loop:
+    OUT
+    SUB
+    JZ start
+    OUT
+    JMP loop

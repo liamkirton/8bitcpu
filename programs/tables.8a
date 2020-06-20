@@ -1,0 +1,9 @@
+start:
+    LD 0x00 RA
+    LD 0x08 RB
+loop:
+    OUT
+    ADD
+    JC start
+    OUT
+    JMP loop
