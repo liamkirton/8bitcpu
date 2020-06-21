@@ -23,11 +23,11 @@ class LabelRef:
 
 
 class Memory:
-    def __init__(self, addr):
-        self.addr = addr
+    def __init__(self, ref):
+        self.ref = ref
 
     def __str__(self):
-        return f'Memory[{self.addr}]'
+        return f'Memory[{self.ref}]'
 
 
 class Register:
@@ -81,9 +81,12 @@ def assemble(tokens):
             if type(src) == Value:
                 translation.append(0x09 + dst.reg_offset)
                 translation.append(src.val)
-            else:
+            elif type(src) == Memory:
+                src = src.ref
+                if type(src) != Value:
+                    raise Exception(f'LD SRC Memory Requires Fixed Address {src}')
                 translation.append(0x02 + dst.reg_offset)
-                translation.append(src.addr)
+                translation.append(src.val)
         elif mneumonic == 'MV':
             if len(params) != 2:
                 raise Exception(f'Syntax: LD SRC DST')
@@ -103,12 +106,16 @@ def assemble(tokens):
 
             if type(src) != Register:
                 raise Exception(f'ST SRC Register Expected')
-            elif type(dst) not in [Memory, Register]:
-                raise Exception(f'ST DST Register/Memory Expected')
+            elif type(dst) is not Memory:
+                raise Exception(f'ST DST Memory Expected')
 
-            if type(dst) == Memory:
+            dst = dst.ref
+            if type(dst) not in [Register, Value]:
+                raise Exception(f'ST DST Memory *Register/*Value')
+
+            if type(dst) == Value:
                 translation.append(0x10 + src.reg_offset)
-                translation.append(dst.addr)
+                translation.append(dst.val)
             else:
                 if dst.reg not in ['C', 'D']:
                     raise Exception(f'ST DST Register Must Be C or D')
@@ -198,9 +205,9 @@ def parse(file_lines):
     def _translate(t):
         if t.startswith('*'):
             t = _translate(t[1:])
-            if type(t) is not Value:
+            if type(t) not in [Register, Value]:
                 raise Exception(f'Memory Syntax Error: *0x10')
-            t = Memory(t.val)
+            t = Memory(t)
         elif t.isdigit():
             t = Value(int(t))
         elif t.startswith('0x') and re.match('[0-9a-fA-F]+', t[2:]):
