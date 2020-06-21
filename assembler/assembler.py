@@ -63,12 +63,12 @@ def assemble(tokens):
 
         translation = []
 
-        if mneumonic == 'HALT':
+        if mneumonic == 'HLT':
             translation.append(0x01)
         elif mneumonic == 'NOP':
             translation.append(0x00)
         elif mneumonic == 'OUT':
-            translation.append(0x35)
+            translation.append(0x43)
 
         elif mneumonic == 'LD':
             if len(params) != 2:
@@ -76,7 +76,7 @@ def assemble(tokens):
             src, dst = params
 
             if type(dst) != Register:
-                raise Exception(f'LD DST Register Expected')
+                raise Exception(f'LD DST Register Expected {dst}')
 
             if type(src) == Value:
                 translation.append(0x09 + dst.reg_offset)
@@ -94,7 +94,7 @@ def assemble(tokens):
             elif type(dst) != Register:
                 raise Exception(f'LD DST Register Expected')
 
-            translation.append(0x17 + 7 * src.reg_offset + dst.reg_offset)
+            translation.append(0x25 + 7 * src.reg_offset + dst.reg_offset)
 
         elif mneumonic == 'ST':
             if len(params) != 2:
@@ -103,16 +103,24 @@ def assemble(tokens):
 
             if type(src) != Register:
                 raise Exception(f'ST SRC Register Expected')
-            elif type(dst) != Memory:
-                raise Exception(f'ST DST Memory Expected')
+            elif type(dst) not in [Memory, Register]:
+                raise Exception(f'ST DST Register/Memory Expected')
 
-            translation.append(0x10 + src.reg_offset)
-            translation.append(dst.addr)
+            if type(dst) == Memory:
+                translation.append(0x10 + src.reg_offset)
+                translation.append(dst.addr)
+            else:
+                if dst.reg not in ['C', 'D']:
+                    raise Exception(f'ST DST Register Must Be C or D')
+                if dst.reg == 'C':
+                    translation.append(0x17 + src.reg_offset)
+                else:
+                    translation.append(0x1e + src.reg_offset)
 
         elif mneumonic == 'ADD':
-            translation.append(0x33)
+            translation.append(0x41)
         elif mneumonic == 'SUB':
-            translation.append(0x34)
+            translation.append(0x42)
 
         elif mneumonic == 'JMP':
             if len(params) != 1:
@@ -122,9 +130,9 @@ def assemble(tokens):
                 raise Exception('JMP TARGET Memory/Label/Register Expected')
 
             if type(target) == Register:
-                translation.append(0x37 + target.reg_offset)
+                translation.append(0x45 + target.reg_offset)
             else:
-                translation.append(0x36)
+                translation.append(0x44)
                 if type(target) == Memory:
                     translation.append(target.addr)
                 else:
@@ -136,11 +144,14 @@ def assemble(tokens):
             target = params[0]
             if type(target) not in [LabelRef, Memory]:
                 raise Exception('JMP TARGET Memory/Label Expected')
-            translation.append({'JC': 0x3e, 'JZ': 0x3f}[mneumonic])
+            translation.append({'JC': 0x4c, 'JZ': 0x4d}[mneumonic])
             if type(target) == Memory:
                 translation.append(target.addr)
             else:
                 translation.append(target)
+
+        else:
+            raise Exception(f'Unknown Mneumonic {mneumonic}')
 
         tokens[i] = translation
 
@@ -186,7 +197,10 @@ def parse(file_lines):
 
     def _translate(t):
         if t.startswith('*'):
-            t = Memory(_translate(t[1:]))
+            t = _translate(t[1:])
+            if type(t) is not Value:
+                raise Exception(f'Memory Syntax Error: *0x10')
+            t = Memory(t.val)
         elif t.isdigit():
             t = Value(int(t))
         elif t.startswith('0x') and re.match('[0-9a-fA-F]+', t[2:]):
@@ -213,13 +227,15 @@ def print_assembly(file_lines, machine_lines, machine_code):
     print()
 
     j = 0
+    k = 0
     for i in range(0, len(file_lines)):
         if re.match('^[a-zA-Z]{1}[a-zA-Z0-9\-_]+:$', file_lines[i]):
             print(file_lines[i])
         else:
             machine_line = ' '.join([f'{v:02x}' for v in machine_lines[j]])
             pad = (5 - len(machine_line)) * ' '
-            print(f'  [ {machine_line}{pad} ]  {file_lines[i]}')
+            print(f'  [ {k:04x} ]  {machine_line}{pad}    {file_lines[i]}')
+            k += len(machine_lines[j])
             j += 1
 
     print()

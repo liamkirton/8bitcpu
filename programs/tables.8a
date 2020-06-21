@@ -1,9 +1,35 @@
 start:
     LD 0x00 RA
-    LD 0x08 RB
+    LD 0x01 RB
+    LD 0x0c RC
+
 loop:
-    OUT
     ADD
-    JC start
     OUT
+    ST RA *0xfe
+    ST RB *0xff
+
+    MV RC RA
+    LD 0x01 RB
+    SUB
+    MV RA RC
+    JZ step_multiplier
+    LD *0xfe RA
+    LD *0xff RB
     JMP loop
+
+step_multiplier:
+    LD *0x3 RA
+    LD 0x01 RB
+    ADD
+    MV RA RD
+    LD 0x0d RB
+    SUB
+    JZ reset_multiplier
+    ST RD *0x3
+    JMP start
+
+reset_multiplier:
+    LD 0x1 RC
+    ST RC *0x3
+    JMP start

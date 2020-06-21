@@ -210,47 +210,47 @@ INSTRUCTIONS = {
     ### STX
     ###
 
-    'STA': (0x10, (
+    'STAM': (0x10, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
         (MOUT, ILIN, PCEN),
         (IOUT, MAIN),
         (AOUT, MIN),
-        (),
+        (AOUT,),
         ()
     )),
-    'STB': (0x11, (
+    'STBM': (0x11, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
         (MOUT, ILIN, PCEN),
         (IOUT, MAIN),
         (BOUT, MIN),
-        (),
+        (BOUT,),
         ()
     )),
-    'STC': (0x12, (
+    'STCM': (0x12, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
         (MOUT, ILIN, PCEN),
         (IOUT, MAIN),
         (COUT, MIN),
-        (),
+        (COUT,),
         ()
     )),
-    'STDL': (0x13, (
+    'STDLM': (0x13, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
         (MOUT, ILIN, PCEN),
         (IOUT, MAIN),
         (DOUT, MIN),
-        (),
+        (DOUT,),
         ()
     )),
-    'STDH': (0x14, ( # Equivalent to NOP
+    'STDHM': (0x14, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCEN,),
@@ -260,20 +260,162 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'STD': (0x15, ( # Equivalent to 'DL'
+    'STDM': (0x15, ( # Equivalent to 'DL'
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
         (MOUT, ILIN, PCEN),
         (IOUT, MAIN),
         (DOUT, MIN),
-        (),
+        (DOUT,),
         ()
     )),
-    'STSG': (0x16, ( # Equivalent to NOP
+    'STSGM': (0x16, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCEN,),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+
+    'STAC': (0x17, (
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (COUT, MAIN),
+        (AOUT, MIN),
+        (AOUT,),
+        (),
+        (),
+        ()
+    )),
+    'STBC': (0x18, (
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (COUT, MAIN),
+        (BOUT, MIN),
+        (BOUT,),
+        (),
+        (),
+        ()
+    )),
+    'STCC': (0x19, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+    'STDLC': (0x1a, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+    'STDHC': (0x1b, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+    'STDC': (0x1c, (
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (COUT, MAIN),
+        (DOUT, MIN),
+        (DOUT,),
+        (),
+        (),
+        ()
+    )),
+    'STSGC': (0x1d, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+
+    'STAD': (0x1e, (
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (DOUT, MAIN),
+        (AOUT, MIN),
+        (AOUT,),
+        (),
+        (),
+        ()
+    )),
+    'STBD': (0x1f, (
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (DOUT, MAIN),
+        (BOUT, MIN),
+        (BOUT,),
+        (),
+        (),
+        ()
+    )),
+    'STCD': (0x20, (
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (DOUT, MAIN),
+        (COUT, MIN),
+        (COUT,),
+        (),
+        (),
+        ()
+    )),
+    'STDLD': (0x21, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+    'STDHD': (0x22, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+    'STDD': (0x23, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
+        (),
+        (),
+        (),
+        (),
+        ()
+    )),
+    'STSGD': (0x24, ( # Equivalent to NOP
+        (PCOUT, MAIN),
+        (MOUT, IHIN, PCEN),
+        (),
         (),
         (),
         (),
@@ -285,7 +427,7 @@ INSTRUCTIONS = {
     ### MVAX
     ###
 
-    'MVAA': (0x17, ( # Equivalent to NOP
+    'MVAA': (0x25, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -295,7 +437,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVAB': (0x18, (
+    'MVAB': (0x26, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, BIN),
@@ -305,7 +447,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVAC': (0x19, (
+    'MVAC': (0x27, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, CIN),
@@ -315,7 +457,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVADL': (0x1a, (
+    'MVADL': (0x28, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, DLIN),
@@ -325,7 +467,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVADH': (0x1b, (
+    'MVADH': (0x29, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, DHIN),
@@ -335,7 +477,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVAD': (0x1c, (
+    'MVAD': (0x2a, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, DLIN, DHIN),
@@ -345,7 +487,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVASG': (0x1d, (
+    'MVASG': (0x2b, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, SGIN),
@@ -360,7 +502,7 @@ INSTRUCTIONS = {
     ### MVBX
     ###
 
-    'MVBA': (0x1e, (
+    'MVBA': (0x2c, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, AIN),
@@ -370,7 +512,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVBB': (0x1f, ( # Equivalent to NOP
+    'MVBB': (0x2d, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -380,7 +522,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVBC': (0x20, (
+    'MVBC': (0x2e, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, CIN),
@@ -390,7 +532,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVBDL': (0x21, (
+    'MVBDL': (0x2f, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, DLIN),
@@ -400,7 +542,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVBDH': (0x22, (
+    'MVBDH': (0x30, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, DHIN),
@@ -410,7 +552,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVBD': (0x23, (
+    'MVBD': (0x31, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, DLIN, DHIN),
@@ -420,7 +562,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVBSG': (0x24, (
+    'MVBSG': (0x32, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, SGIN),
@@ -435,7 +577,7 @@ INSTRUCTIONS = {
     ### MVCX
     ###
 
-    'MVCA': (0x25, (
+    'MVCA': (0x33, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, AIN),
@@ -445,7 +587,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVCB': (0x26, (
+    'MVCB': (0x34, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, BIN),
@@ -455,7 +597,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVCC': (0x27, ( # Equivalent to NOP
+    'MVCC': (0x35, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -465,7 +607,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVCDL': (0x28, (
+    'MVCDL': (0x36, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, DLIN),
@@ -475,7 +617,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVCDH': (0x29, (
+    'MVCDH': (0x37, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, DHIN),
@@ -485,7 +627,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVCD': (0x2a, (
+    'MVCD': (0x38, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, DLIN, DHIN),
@@ -495,7 +637,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVCSG': (0x2b, (
+    'MVCSG': (0x39, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, SGIN),
@@ -510,7 +652,7 @@ INSTRUCTIONS = {
     ### MVDX
     ###
 
-    'MVDA': (0x2c, (
+    'MVDA': (0x3a, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (DOUT, AIN),
@@ -520,7 +662,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVDB': (0x2d, (
+    'MVDB': (0x3b, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (DOUT, BIN),
@@ -530,7 +672,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVDC': (0x2e, (
+    'MVDC': (0x3c, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (DOUT, CIN),
@@ -540,7 +682,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVDDL': (0x2f, ( # Equivalent to NOP
+    'MVDDL': (0x3d, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -550,7 +692,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVDDH': (0x30, ( # Equivalent to NOP
+    'MVDDH': (0x3e, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -560,7 +702,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVDD': (0x31, ( # Equivalent to NOP
+    'MVDD': (0x3f, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -570,7 +712,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'MVDSG': (0x32, (
+    'MVDSG': (0x40, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (DOUT, SGIN),
@@ -585,7 +727,7 @@ INSTRUCTIONS = {
     ### ALU
     ###
 
-    'ADD': (0x33, (
+    'ADD': (0x41, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (FLIN,),
@@ -595,7 +737,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'SUB': (0x34, (
+    'SUB': (0x42, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (SNEG, FLIN),
@@ -610,7 +752,7 @@ INSTRUCTIONS = {
     ### OUT
     ###
 
-    'OUT': (0x35, (
+    'OUT': (0x43, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, DLIN),
@@ -625,7 +767,7 @@ INSTRUCTIONS = {
     ### JMP
     ###
 
-    'JMPM': (0x36, (
+    'JMPM': (0x44, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
@@ -635,7 +777,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPA': (0x37, (
+    'JMPA': (0x45, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (AOUT, PCLD, SGIN),
@@ -645,7 +787,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPB': (0x38, (
+    'JMPB': (0x46, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (BOUT, PCLD, SGIN),
@@ -655,7 +797,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPC': (0x39, (
+    'JMPC': (0x47, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (COUT, PCLD, SGIN),
@@ -665,7 +807,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPDL': (0x3a, (
+    'JMPDL': (0x48, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (DOUT, PCLD),
@@ -675,7 +817,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPDH': (0x3b, ( # Equivalent to NOP
+    'JMPDH': (0x49, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -685,7 +827,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPD': (0x3c, (
+    'JMPD': (0x4a, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (DOUT, PCLD, SGIN),
@@ -695,7 +837,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JMPSG': (0x3d, ( # Equivalent to NOP
+    'JMPSG': (0x4b, ( # Equivalent to NOP
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (),
@@ -710,7 +852,7 @@ INSTRUCTIONS = {
     ### Conditional JMPs (NOPs here)
     ###
 
-    'JC': (0x3e, (
+    'JC': (0x4c, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCEN,),
@@ -720,7 +862,7 @@ INSTRUCTIONS = {
         (),
         ()
     )),
-    'JZ': (0x3f, (
+    'JZ': (0x4d, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCEN,),
@@ -733,7 +875,7 @@ INSTRUCTIONS = {
 }
 
 INSTRUCTIONS_CF = {
-    'JC': (0x3e, (
+    'JC': (0x4c, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
@@ -746,7 +888,7 @@ INSTRUCTIONS_CF = {
 }
 
 INSTRUCTIONS_ZF = {
-    'JZ': (0x3f, (
+    'JZ': (0x4d, (
         (PCOUT, MAIN),
         (MOUT, IHIN, PCEN),
         (PCOUT, MAIN),
