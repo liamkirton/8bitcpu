@@ -89,13 +89,13 @@ def assemble(tokens):
                 translation.append(src.val)
         elif mneumonic == 'MV':
             if len(params) != 2:
-                raise Exception(f'Syntax: LD SRC DST')
+                raise Exception(f'Syntax: MV SRC DST')
             src, dst = params
 
             if type(src) != Register:
-                raise Exception(f'LD SRC Register Expected')
+                raise Exception(f'MV SRC Register Expected')
             elif type(dst) != Register:
-                raise Exception(f'LD DST Register Expected')
+                raise Exception(f'MV DST Register Expected')
 
             translation.append(0x25 + 7 * src.reg_offset + dst.reg_offset)
 
