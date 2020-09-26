@@ -1,5 +1,0 @@
-LD 0xff RDL
-LD 0x1 RDH
-LD 0x1 RA
-ST RA *RD
-JMP RD

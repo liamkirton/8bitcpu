@@ -1,5 +1,10 @@
-.vscode
 __pycache__
+.vs
+.vscode
 venv
 
 *.egg-info
+
+bin
+obj
+*.vcxproj.user

@@ -1,6 +1,8 @@
 import argparse
 import os
 import re
+import subprocess
+import tempfile
 
 import at28c256
 import bootstrap
@@ -262,6 +264,18 @@ def run(args):
 
     print_assembly(file_lines, machine_lines, machine_code)
 
+    if args.emulator:
+        t = tempfile.NamedTemporaryFile('wb', delete=False)
+        t.write(machine_code)
+        t.close()
+        try:
+            p = subprocess.run([args.emulator, t.name])
+        finally:
+            os.unlink(t.name)
+    if args.out:
+        with open(args.out, 'wb') as f:
+            f.write(machine_code)
+
     if args.port:
         with bootstrap.Bootstrap(args.port) as b:
             b.write_range(0, machine_code)
@@ -270,6 +284,8 @@ def run(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Assembler.')
+    parser.add_argument('--emulator', dest='emulator', default='', type=str)
+    parser.add_argument('--out', dest='out', default='', type=str)
     parser.add_argument('--program', dest='port', default='', type=str)
     parser.add_argument('file', type=str)
     args = parser.parse_args()
