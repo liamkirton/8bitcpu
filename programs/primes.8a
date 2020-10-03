@@ -1,0 +1,49 @@
+# for a in range(2, 256):
+#     d = 0
+#     for b in range(2, a):
+#         c = a
+#         while c > 0:
+#             c = c - b
+#             if c == 0:
+#                 d += 1
+#     if d == 0:
+#         print(a, 'prime')
+
+reset:
+    LD 0x01 RA
+    ST RA *0xff
+
+next_candidate:
+    LD *0xff RA
+    LD 0x01 RB
+    ADD
+    JC reset
+    ST RA *0xff
+    LD 0x01 RB
+    ST RB *0xfe
+    LD 0x00 RD
+
+next_trial:
+    LD *0xfe RA
+    LD 0x1 RB
+    ADD
+    ST RA *0xfe
+
+    LD *0xff RA
+    LD *0xfe RB
+    SUB
+    JZ found_prime
+
+    LD *0xff RA
+    LD 0x00 RC
+
+test_loop:
+    SUB
+    JZ next_candidate
+    JC test_loop # SUB A B => CF set if A >= B, not A < B
+    JMP next_trial
+
+found_prime:
+    LD *0xff RA
+    OUT
+    jmp next_candidate

@@ -5,12 +5,12 @@ namespace cpuemu {
     class Machine {
     public:
         Machine() : 
-                dump_{false},
+                output_level_{ 1 },
                 memory_(new uint8_t[memory_size_]),
                 memory_limit_{ 0 },
                 step_{ 0 },
                 pc_{ 0 }, reg_seg_{ 0 },
-                flag_c_(false), flag_z_(false), halt_(false),
+                flag_c_(false), flag_z_(false), error_(false), halt_(false),
                 reg_a_{ 0 }, reg_b_{ 0 }, reg_c_{ 0 }, reg_d_{ 0 }, reg_o_{ 0 } {
             std::memset(memory_.get(), 0, memory_size_);
         }
@@ -24,8 +24,11 @@ namespace cpuemu {
 
         }
 
-        void set_dump(bool dump) {
-            dump_ = dump;
+        void set_output(uint8_t output_level) {
+            if (output_level > 4) {
+                output_level = 4;
+            }
+            output_level_ = output_level;
         }
 
         bool running() {
@@ -35,10 +38,7 @@ namespace cpuemu {
         void step();
 
     private:
-        void print_dump() {
-            print_dump(0, memory_size_);
-        }
-
+        void print();
         void print_dump(size_t start, size_t end);
         void print_status();
 
@@ -55,7 +55,7 @@ namespace cpuemu {
         void instr_store_reg_memory();
         void instr_store_reg_memory_indirect();
 
-        bool dump_;
+        uint8_t output_level_;
 
         const size_t memory_size_ = 32768;
         std::shared_ptr<uint8_t[]> memory_;
@@ -68,6 +68,7 @@ namespace cpuemu {
 
         bool flag_c_;
         bool flag_z_;
+        bool error_;
         bool halt_;
 
         Opcode reg_instr_;

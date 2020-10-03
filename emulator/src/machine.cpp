@@ -1,5 +1,14 @@
 #include "cpuemu.h"
 
+void cpuemu::Machine::print() {
+    if ((output_level_ == 4) || ((output_level_ == 3) && halt_) || error_) {
+        print_dump(0, memory_limit_);
+    }
+    else if ((output_level_ >= 2) || ((output_level_ == 1) && (step_ % 100 == 0)) || halt_) {
+        print_status();
+    }
+}
+
 void cpuemu::Machine::print_dump(size_t start, size_t end) {
     std::cout << std::hex << std::setfill('0') << std::endl;
 
@@ -59,12 +68,7 @@ void cpuemu::Machine::print_status() {
 void cpuemu::Machine::step() {
     reg_instr_ = static_cast<Opcode>(memory_[static_cast<size_t>(reg_seg_) * 16 + pc_]);
 
-    if (dump_) {
-        print_dump(0, memory_limit_);
-    }
-    else {
-        print_status();
-    }
+    print();
 
     switch (reg_instr_) {
     case Opcode::NOP:
@@ -73,6 +77,7 @@ void cpuemu::Machine::step() {
 
     case Opcode::HALT:
         halt_ = true;
+        print();
         break;
 
     case Opcode::LDAM:
@@ -188,7 +193,8 @@ void cpuemu::Machine::step() {
         break;
 
     default:
-        halt_ = true;
+        error_ = halt_ = true;
+        print();
         break;
     }
 
