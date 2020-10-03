@@ -281,12 +281,20 @@ def run(args):
             b.write_range(0, machine_code)
         print()
 
+    if args.romh:
+        machine_code_hex = ['0x%02x' % b for b in machine_code]
+        with open(args.romh, 'w') as f:
+            print('const uint8_t INIT_PROGRAM[] PROGMEM = {', file=f)
+            for i in range(0, len(machine_code_hex), 16):
+                print('    ', ', '.join(machine_code_hex[i:i+16]), ',' if i + 16 < len(machine_code_hex) else '', sep='', file=f)
+            print('};', file=f)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Assembler.')
     parser.add_argument('--emulator', dest='emulator', default='', type=str)
     parser.add_argument('--out', dest='out', default='', type=str)
     parser.add_argument('--program', dest='port', default='', type=str)
+    parser.add_argument('--romh', dest='romh', default='', type=str)
     parser.add_argument('file', type=str)
     args = parser.parse_args()
 

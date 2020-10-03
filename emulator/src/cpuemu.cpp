@@ -31,10 +31,12 @@ int main(int argc, char *argv[]) {
     memory_init_file.close();
 
     cpuemu::Machine machine(memory_init, memory_init_size);
+    machine.set_dump(false);
+
     while (machine.running()) {
         machine.step();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     std::cout << std::endl << std::endl;
